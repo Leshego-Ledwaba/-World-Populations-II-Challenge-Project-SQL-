@@ -1,0 +1,72 @@
+--determining number of entries from Africa
+SELECT COUNT (*)
+FROM countries
+WHERE continent = 'Africa';
+
+-- determining the total population of the continent of Oceania in 2005
+------A. first join tables
+SELECT
+ countries.continent,
+ ROUND(SUM(population_years.population),0) AS 'Total population',
+ population_years.year
+FROM population_years
+JOIN countries
+ ON countries.id = population_years.country_id
+ WHERE countries.continent = 'Oceania'
+  AND population_years.year = 2005;
+-- ANSWER Oceania population in 2005 was 33 million
+
+--determining average population of countries in South America in 2003
+SELECT 
+ countries.continent,
+ ROUND(AVG(population_years.population),0) AS 'Average population',
+ population_years.year
+FROM population_years
+JOIN countries
+ ON countries.id = population_years.country_id
+WHERE countries.continent = 'South America'
+ AND population_years.year = 2003;
+ --ANSWER average of populations in South America in 2003 was 26 million
+
+-- determining country with the smallest population in 2007
+SELECT 
+ countries.name,
+ MIN(population_years.population) AS 'Population',
+ population_years.year
+FROM population_years
+JOIN countries
+ ON countries.id = population_years.country_id
+WHERE population_years.year = 2007;
+--ANSWER country with smallest population in 2007 is Niue with population of 0.00216
+
+
+--determining the average population of Poland during the time period covered by this dataset
+SELECT 
+ countries.name,
+ ROUND(AVG(population_years.population),0) AS 'Population'
+FROM population_years
+JOIN countries
+ ON countries.id = population_years.country_id
+WHERE countries.name = 'Poland';
+--ANSWER Poland's average population across the time period of this dataset is 39 million
+
+-- determining number of countries with the word “The” in their name
+SELECT 
+ COUNT(*) AS 'Number of countries'
+FROM population_years
+JOIN countries
+ ON countries.id = population_years.country_id
+WHERE countries.name LIKE '%The%';
+--ANSWER 33 countries have the word 'THE' in their name
+
+--determining the total population of each continent in 2010
+SELECT 
+ countries.continent,
+ ROUND(SUM(population_years.population),0) AS 'Total population'
+FROM population_years
+JOIN countries
+ ON countries.id = population_years.country_id
+GROUP BY countries.continent
+HAVING population_years.year = 2010;
+--ANSWER (Africa - 9 972 mil), (Asia - 43 061 mil), Europe (7 991 mil), North America (5 644 mil), Oceania 8 359), South America (4 096 mil)
+
